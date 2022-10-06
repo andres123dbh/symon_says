@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="./js/index.js" type="module"></script>
+    <link rel="stylesheet" href="./css/app.css">
+    <audio id="simonSound1">
+        <source src="./sounds/simonSound1.mp3"></source>
+    </audio>
+    <audio id="simonSound2">
+        <source src="./sounds/simonSound2.mp3"></source>
+    </audio>
+    <audio id="simonSound3">
+        <source src="./sounds/simonSound3.mp3"></source>
+    </audio>
+    <audio id="simonSound4">
+        <source src="./sounds/simonSound4.mp3"></source>
+    </audio>
+    <audio id="soundError">
+        <source src="./sounds/soundError.mp3"></source>
+    </audio>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Says</title>
+
+</head>
+
+<body>
+    <div class="container">
+
+        <h1 class="text-center">Simon Says</h1>
+
+        <div class="flex-container">
+            <div id="green" class="sbtn green">G</div>
+            <div id="red" class="sbtn red">R</div>
+        </div>
+        <div class="flex-container">
+            <div id="yellow" class="sbtn yellow">Y</div>
+            <div id="blue" class="sbtn blue">B</div>
+        </div>
+
+        <div class="flex-container">
+            <div class="text-center" id="btn_div_start">
+                <div class="timer_CountDown" id="count_div">
+                    <div>
+                        <p id="time_count"></p> 
+                    </div>
+                </div>
+
+                <a id="btn_star_game" class="btn">Start</a>
+            </div>
+        </div>
+
+        <div class="flex-container">
+            <table id="table_score"></table>
+        </div>
+
+        <div id="modal_win" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h2>Top 10</h2>
+                </div>
+                <div class="modal-body">
+                    <p id="title_top_10">Write Your Name:</p>
+                    <input type="text" id="name" placeholder="Your Name" required><br>
+                    <p id="error_name_top_10">Name cannot be empty</p>
+                    <button id="submit" type="submit">Submit</button><br>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal_choose_level" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h2>Choose Level</h2>
+                </div>
+                <div class="modal-body">
+                    <button class="level_game" type="submit" value="easy">Easy</button><br>
+                    <button class="level_game" type="submit" value="normal">Normal</button><br>
+                    <button class="level_game" type="submit" value="hard">Hard</button><br>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal_lose" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h2>Lose</h2>
+                <button class="level_game" id="submit_lose" type="submit">Try Again</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,26 +1,42 @@
 import { Request, Response } from "express";
 import { render } from 'ejs';
 
+interface iScore{
+    name: string;
+    score: string;
+    difficulty: string;
+}
+
+interface iScoreContainer{
+	scores: iScore[];
+}
+
+
 class ServerController {
 
     constructor() {
     // TODO document why this constructor is empty    
     } 
 
-    hello(req: Request, res: Response): Response {
-    return res.json({ 'error': false, 'message': 'Hello API!' });
+    getTableScore(req: Request, res: Response): Response {
+        try{
+            const path = require('path'); 
+            const fs = require('fs'); 
+			let scorePath = path.join(__dirname, "../data/data.json");
+			const data    = fs.readFileSync(scorePath, 'utf8');
+			const scores  = <iScoreContainer>JSON.parse(data);
+
+			console.log("Scores requested");
+			return res.json({ 'error': false, 'scores': scores.scores});
+		}
+		catch(err){
+			return res.json({ 'error': true });
+		}
     }
 
-    postHello(req: Request, res: Response): Response {
-    console.log(req);    
-    return res.json({ 'error': false, 'message': 'Hello POST!' });
-    }
-
-    index(req: Request, res: Response): void {
-    const data = {
-        text: 'Contenido dinámico HTML'
-    }
-    res.render('index.ejs', { data: data });
+    postSaveScore(req: Request, res: Response) {
+        let newscore: any = req.body;
+        console.log(newscore)
     }
 }
 

@@ -114,6 +114,10 @@ export class IndexController {
 
     /* init page */
     public init_page() {
-        this.view.update_table(this.model.array_score);
+        (async () => {
+            const users = await this.model.getScoreAPI();
+            this.model.array_score = this.model.array_score.concat(users);
+            this.view.update_table(this.model.array_score);
+        })()
     }
 }

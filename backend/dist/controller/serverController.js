@@ -4,18 +4,23 @@ class ServerController {
     constructor() {
         // TODO document why this constructor is empty    
     }
-    hello(req, res) {
-        return res.json({ 'error': false, 'message': 'Hello API!' });
+    getTableScore(req, res) {
+        try {
+            const path = require('path');
+            const fs = require('fs');
+            let scorePath = path.join(__dirname, "../data/data.json");
+            const data = fs.readFileSync(scorePath, 'utf8');
+            const scores = JSON.parse(data);
+            console.log("Scores requested");
+            return res.json({ 'error': false, 'scores': scores.scores });
+        }
+        catch (err) {
+            return res.json({ 'error': true });
+        }
     }
-    postHello(req, res) {
-        console.log(req);
-        return res.json({ 'error': false, 'message': 'Hello POST!' });
-    }
-    index(req, res) {
-        const data = {
-            text: 'Contenido dinámico HTML'
-        };
-        res.render('index.ejs', { data: data });
+    postSaveScore(req, res) {
+        let newscore = req.body;
+        console.log(newscore);
     }
 }
 const serverController = new ServerController();

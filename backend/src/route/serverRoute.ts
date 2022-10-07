@@ -12,9 +12,8 @@ class ServerRoute {
     }
 
     config(): void {
-        this.router.get('/', serverController.index);
-        this.router.get('/hello', serverController.hello);
-        this.router.post('/post-hello', serverController.postHello);
+        this.router.get('/getTableScore', serverController.getTableScore);
+        this.router.post('/postSaveScore', serverController.postSaveScore);
     }
 }
 

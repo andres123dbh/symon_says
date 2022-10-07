@@ -1,3 +1,14 @@
+interface iScore{
+	name: string;
+	score: string;
+    difficulty: string;
+}
+
+interface iGetScore{
+	error: boolean;
+	scores: iScore[];
+}
+
 export class IndexModel {
     public round:number;
     public array_colors: Array<number>;
@@ -12,15 +23,9 @@ export class IndexModel {
 
     constructor() {
         this.array_score = [];
-        if (localStorage.getItem('array_users_score') != null) {
-            const arrar_localstorage = localStorage.getItem('array_users_score');
-            if (arrar_localstorage != null) {
-                const array_string = arrar_localstorage.split(",");
-                for (let i = 0; i < array_string.length; i += 3) {
-                    let array_user = [array_string[i],array_string[i+1],array_string[i+2]]
-                    this.array_score.push(array_user);
-                }
-            }
+        const asyncExample = async () => {
+            const result = await this.getScoreAPI();
+            return result
         }
         this.round = 0;
         this.array_colors = [];
@@ -209,8 +214,9 @@ export class IndexModel {
                 default:
                     break;
             }
+            this.convertToJSON();
             localStorage.setItem('array_users_score',this.array_score.toString());
-            location.reload();
+            //location.reload();
         } else{
             if (error_message != null) {
                 error_message.style.display = "block";
@@ -223,6 +229,54 @@ export class IndexModel {
         let name = document.getElementById("name") as HTMLInputElement;
         return name.value;
     }
+
+    /* get score */
+    public async getScoreAPI(): Promise<string[][]>{
+        let scores: iGetScore = {error: false, scores: []};
+        try{
+			const response =  await fetch("http://127.0.0.1:1802/getTableScore");
+			scores = <iGetScore>(await response.json());
+		}
+		catch(e){
+			console.log(e);
+		}
+        var obj = JSON.parse(JSON.stringify(scores.scores));
+        let array_temp: Array<Array<string>>;
+        array_temp = [];
+        for(var i in obj){
+            let array_user = [obj[i].name,obj[i].score,obj[i].difficulty]
+            array_temp.push(array_user);
+        }
+        return array_temp;
+    }
+
+    public convertToJSON() {
+        let array_tem: any = [];
+        
+        this.array_score.forEach(element => {
+            array_tem.push({name: element[0].toString(), score: element[1].toString(), difficulty: element[2].toString()});
+        });
+        let json = JSON.stringify(array_tem);
+
+        this.saveScore(json);
+    }
+
+    private async saveScore(array_post: string){
+        (async () => {
+            const rawResponse = await fetch('http://127.0.0.1:1802/postSaveScore', {
+                method: 'POST',
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(array_post),
+                mode: 'no-cors'
+            });
+            const content = await rawResponse.json();
+        
+            console.log(content);
+        })();
+	}
 
 }
 

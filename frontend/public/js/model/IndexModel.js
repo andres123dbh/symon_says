@@ -1,16 +1,19 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 export class IndexModel {
     constructor() {
         this.array_score = [];
-        if (localStorage.getItem('array_users_score') != null) {
-            const arrar_localstorage = localStorage.getItem('array_users_score');
-            if (arrar_localstorage != null) {
-                const array_string = arrar_localstorage.split(",");
-                for (let i = 0; i < array_string.length; i += 3) {
-                    let array_user = [array_string[i], array_string[i + 1], array_string[i + 2]];
-                    this.array_score.push(array_user);
-                }
-            }
-        }
+        const asyncExample = () => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.getScoreAPI();
+            return result;
+        });
         this.round = 0;
         this.array_colors = [];
         this.player_position = 0;
@@ -190,8 +193,9 @@ export class IndexModel {
                 default:
                     break;
             }
+            this.convertToJSON();
             localStorage.setItem('array_users_score', this.array_score.toString());
-            location.reload();
+            //location.reload();
         }
         else {
             if (error_message != null) {
@@ -204,5 +208,51 @@ export class IndexModel {
     get_name_table_score() {
         let name = document.getElementById("name");
         return name.value;
+    }
+    /* get score */
+    getScoreAPI() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let scores = { error: false, scores: [] };
+            try {
+                const response = yield fetch("http://127.0.0.1:1802/getTableScore");
+                scores = (yield response.json());
+            }
+            catch (e) {
+                console.log(e);
+            }
+            var obj = JSON.parse(JSON.stringify(scores.scores));
+            let array_temp;
+            array_temp = [];
+            for (var i in obj) {
+                let array_user = [obj[i].name, obj[i].score, obj[i].difficulty];
+                array_temp.push(array_user);
+            }
+            return array_temp;
+        });
+    }
+    convertToJSON() {
+        let array_tem = [];
+        this.array_score.forEach(element => {
+            array_tem.push({ name: element[0].toString(), score: element[1].toString(), difficulty: element[2].toString() });
+        });
+        let json = JSON.stringify(array_tem);
+        this.saveScore(json);
+    }
+    saveScore(array_post) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (() => __awaiter(this, void 0, void 0, function* () {
+                const rawResponse = yield fetch('http://127.0.0.1:1802/postSaveScore', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(array_post),
+                    mode: 'no-cors'
+                });
+                const content = yield rawResponse.json();
+                console.log(content);
+            }))();
+        });
     }
 }

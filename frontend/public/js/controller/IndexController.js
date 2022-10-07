@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 export class IndexController {
     constructor(model, view) {
         this.model = model;
@@ -98,6 +107,10 @@ export class IndexController {
     }
     /* init page */
     init_page() {
-        this.view.update_table(this.model.array_score);
+        (() => __awaiter(this, void 0, void 0, function* () {
+            const users = yield this.model.getScoreAPI();
+            this.model.array_score = this.model.array_score.concat(users);
+            this.view.update_table(this.model.array_score);
+        }))();
     }
 }

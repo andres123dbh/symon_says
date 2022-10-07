@@ -11,9 +11,8 @@ class ServerRoute {
         this.config();
     }
     config() {
-        this.router.get('/', serverController_1.default.index);
-        this.router.get('/hello', serverController_1.default.hello);
-        this.router.post('/post-hello', serverController_1.default.postHello);
+        this.router.get('/getTableScore', serverController_1.default.getTableScore);
+        this.router.post('/postSaveScore', serverController_1.default.postSaveScore);
     }
 }
 const serverRoute = new ServerRoute();

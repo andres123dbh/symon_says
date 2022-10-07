@@ -1,16 +1,7 @@
 import { Request, Response } from "express";
 import { render } from 'ejs';
-
-interface iScore{
-    name: string;
-    score: string;
-    difficulty: string;
-}
-
-interface iScoreContainer{
-	scores: iScore[];
-}
-
+import { iScore } from "../interfaces/IScore.js";
+import { iScoreContainer } from "../interfaces/IScoreContainer.js";
 
 class ServerController {
 
@@ -34,9 +25,23 @@ class ServerController {
 		}
     }
 
-    postSaveScore(req: Request, res: Response) {
-        let newscore: any = req.body;
-        console.log(newscore)
+    postSaveScore(req: Request, res: Response): Response {
+        
+        try{
+			const path = require('path'); 
+            const fs = require('fs'); 
+		    let scorePath = path.join(__dirname, "../data/data.json");
+            let newscore: any = req.body;
+
+			// write
+            let score = {"scores": newscore.score};
+			fs.writeFileSync(scorePath, JSON.stringify(score), 'utf8');
+			console.log(`Registered score`);
+			return res.json({ 'error': false });
+		}
+		catch(err){
+			return res.json({ 'error': true });
+		}
     }
 }
 

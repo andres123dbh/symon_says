@@ -1,14 +1,1 @@
-{
-  "scores": [
-    { "name": "Reider", "score": "6" , "difficulty":"easy"},
-    { "name": "Wario", "score": "6" , "difficulty":"easy"},
-    { "name": "Mario", "score": "5" , "difficulty":"easy"},
-    { "name": "Luigi", "score": "4" , "difficulty":"easy"},
-    { "name": "Peach", "score": "4" , "difficulty":"easy"},
-    { "name": "Woynert", "score": "3" , "difficulty":"easy"},
-    { "name": "Daisy", "score": "3" , "difficulty":"easy"},
-    { "name": "Yoshi", "score": "0" , "difficulty":"easy"},
-    { "name": "Koopa troopa", "score": "0" , "difficulty":"easy"},
-    { "name": "Envelopment", "score": "0" , "difficulty":"easy"}
-  ]
-}
+{"scores":[{"name":"andres","score":"7","difficulty":"hard"},{"name":"andres","score":"1","difficulty":"normal"},{"name":"david","score":"1","difficulty":"hard"},{"name":"e","score":"0","difficulty":"easy"}]}

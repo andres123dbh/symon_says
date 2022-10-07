@@ -10,10 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 export class IndexModel {
     constructor() {
         this.array_score = [];
-        const asyncExample = () => __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.getScoreAPI();
-            return result;
-        });
         this.round = 0;
         this.array_colors = [];
         this.player_position = 0;
@@ -194,8 +190,6 @@ export class IndexModel {
                     break;
             }
             this.convertToJSON();
-            localStorage.setItem('array_users_score', this.array_score.toString());
-            //location.reload();
         }
         else {
             if (error_message != null) {
@@ -235,24 +229,32 @@ export class IndexModel {
         this.array_score.forEach(element => {
             array_tem.push({ name: element[0].toString(), score: element[1].toString(), difficulty: element[2].toString() });
         });
-        let json = JSON.stringify(array_tem);
-        this.saveScore(json);
+        // this.saveScore(array_tem);
+        (() => __awaiter(this, void 0, void 0, function* () {
+            const users = yield this.saveScore(array_tem);
+            location.reload();
+        }))();
     }
     saveScore(array_post) {
         return __awaiter(this, void 0, void 0, function* () {
-            (() => __awaiter(this, void 0, void 0, function* () {
-                const rawResponse = yield fetch('http://127.0.0.1:1802/postSaveScore', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(array_post),
-                    mode: 'no-cors'
+            try {
+                let body = { score: array_post };
+                const response = yield fetch("http://127.0.0.1:1802/postSaveScore", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                }).then((response) => response.json())
+                    .then((data) => {
+                    console.log('Success:', data);
+                })
+                    .catch((error) => {
+                    console.error('Error:', error);
                 });
-                const content = yield rawResponse.json();
-                console.log(content);
-            }))();
+                ;
+            }
+            catch (e) {
+                console.log(e);
+            }
         });
     }
 }

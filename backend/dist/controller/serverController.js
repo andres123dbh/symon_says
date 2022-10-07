@@ -19,8 +19,20 @@ class ServerController {
         }
     }
     postSaveScore(req, res) {
-        let newscore = req.body;
-        console.log(newscore);
+        try {
+            const path = require('path');
+            const fs = require('fs');
+            let scorePath = path.join(__dirname, "../data/data.json");
+            let newscore = req.body;
+            // write
+            let score = { "scores": newscore.score };
+            fs.writeFileSync(scorePath, JSON.stringify(score), 'utf8');
+            console.log(`Registered score`);
+            return res.json({ 'error': false });
+        }
+        catch (err) {
+            return res.json({ 'error': true });
+        }
     }
 }
 const serverController = new ServerController();
